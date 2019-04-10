@@ -106,19 +106,39 @@ class Player {
     this.speed = speed;
     this.isAlive = true;
     this.equipped = false;
-
+    this.getPack = function (){return this._pack};
+    this.getMaxHealth = function (){return this._maxHealth}
   }
 
-  getPack() {
-    return this._pack;
+  checkPack(){
+    return console.log(this.getPack().toString())
   }
 
-  getMaxHealth() {
-    return this._maxHealth;
+  takeItem(item){
+    if(this._pack.length < 3){
+      console.log(`${this.name} has picked up the following item: ${item.name}`);
+      this._pack.push(item);
+      return true;
+    } else {
+      console.log(`${this.name}'s pack is full so the item could not be stored.`);
+      return false;
+    }
+  }
+
+  discardItem(item){
+    if(this._pack.indexOf(item) !== -1){
+      let spliceHere = this._pack.indexOf(item);
+      this._pack.splice(spliceHere, 1);
+      console.log(`${this.name} has discarded ${item.name}`);
+      return true;
+    } else {
+      console.log(`Nothing was discarded because the item was not found.`);
+      return false;
+    }
+
   }
 
 }
-
 
 /**
  * Player Class Method => checkPack()
