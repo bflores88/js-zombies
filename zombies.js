@@ -129,14 +129,53 @@ class Player {
     if(this._pack.indexOf(item) !== -1){
       let spliceHere = this._pack.indexOf(item);
       this._pack.splice(spliceHere, 1);
-      console.log(`${this.name} has discarded ${item.name}`);
+      console.log(`${this.name} has removed ${item.name}`);
       return true;
     } else {
       console.log(`Nothing was discarded because the item was not found.`);
       return false;
     }
+  }
+
+  equip(itemToEquip){
+    if(!(itemToEquip instanceof Weapon)){
+      console.log(`Item is not a weapon!`);
+      return false;
+    }
+
+    if(this._pack.indexOf(itemToEquip) === -1){
+      console.log(`This weapon does not exist in the pack.`);
+      return false;
+    }
+
+    if(this.equipped === false){
+      this.discardItem(itemToEquip);
+      this.equipped = itemToEquip;
+    } else {
+      let temp = this.equipped;
+      this.discardItem(itemToEquip);
+      this.takeItem(temp);
+      this.equipped = itemToEquip;
+    }
 
   }
+
+  // equip(itemToEquip){
+  //   if(itemToEquip instanceof Weapon){
+  //     if(this.equipped = false){
+  //       this.discardItem(itemToEquip);
+  //       this.equipped = itemToEquip;
+  //     } else {
+  //       let temp = this.equipped;
+  //       this.discardItem(itemToEquip);
+  //       this.takeItem(temp);
+  //       this.equipped = itemToEquip;
+  //     }
+  //   } else {
+  //     console.log('You do not have this item.');
+  //     return false;
+  //   }
+  // }
 
 }
 
