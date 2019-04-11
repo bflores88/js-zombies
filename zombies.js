@@ -108,13 +108,15 @@ class Player {
     this.speed = speed;
     this.isAlive = true;
     this.equipped = false;
+
     this.getPack = function () {
       return this._pack
     };
+
     this.getMaxHealth = function () {
       return this._maxHealth
-    }
-  }
+    };
+  };
 
   /**
    * Player Class Method => checkPack()
@@ -130,7 +132,7 @@ class Player {
 
   checkPack() {
     return console.log(`${this.name} has the following items: ${this.getPack().map((elem) => elem.name).join(', ')}`)
-  }
+  };
 
   /**
    * Player Class Method => takeItem(item)
@@ -158,8 +160,8 @@ class Player {
     } else {
       console.log(`${this.name}'s pack is full so the item could not be stored.`);
       return false;
-    }
-  }
+    };
+  };
 
   /**
    * Player Class Method => discardItem(item)
@@ -196,8 +198,8 @@ class Player {
     } else {
       console.log(`Nothing was discarded because the item was not found.`);
       return false;
-    }
-  }
+    };
+  };
 
   /**
    * Player Class Method => equip(itemToEquip)
@@ -223,12 +225,12 @@ class Player {
     if (!(itemToEquip instanceof Weapon)) {
       console.log(`Item is not a weapon!`);
       return false;
-    }
+    };
 
     if (this._pack.indexOf(itemToEquip) === -1) {
       console.log(`This weapon does not exist in the pack.`);
       return false;
-    }
+    };
 
     if (this.equipped === false) {
       this.discardItem(itemToEquip);
@@ -237,8 +239,8 @@ class Player {
       this.discardItem(itemToEquip);
       this.takeItem(this.equipped);
       this.equipped = itemToEquip;
-    }
-  }
+    };
+  };
 
   /**
    * Player Class Method => eat(itemToEat)
@@ -263,21 +265,25 @@ class Player {
     if (!(itemToEat instanceof Food)) {
       console.log('This is not a food item.');
       return false;
-    }
+    };
 
     if (this._pack.indexOf(itemToEat) === -1) {
       console.log('This food does not exist in the pack.');
       return false;
-    }
+    };
 
     this.discardItem(itemToEat);
 
-    if (Number(itemToEat.energy) >= Number(this._maxHealth)) {
-      return this.health = this._maxHealth;
-    } else {
-      return this.health += Number(itemToEat.energy);
-    }
-  }
+    if (Number(itemToEat.energy) >= Number(this.getMaxHealth())) {
+      return this.health = this.getMaxHealth();
+    };
+
+    if (Number(itemToEat.energy) + this.health > Number(this.getMaxHealth())) {
+      return this.health = this.getMaxHealth();
+    };
+
+    return this.health += Number(itemToEat.energy);
+  };
 
   /**
    * Player Class Method => useItem(item)
@@ -320,11 +326,11 @@ class Player {
     if (this.equipped === false) {
       console.log(`Nothing is equipped.`);
       return false;
-    }
+    };
 
     console.log(`${this.name} has ${this.equipped.name} equipped.`);
     return this.equipped.name;
-  }
+  };
 }
 
 /**
