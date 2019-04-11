@@ -33,7 +33,7 @@ function Item(name) {
 function Weapon(name, damage) {
   this.damage = damage;
   Item.call(this, name);
-}
+};
 
 /**
  * Weapon Extends Item Class
@@ -101,18 +101,21 @@ function Player(name, health, strength, speed) {
   this.speed = speed;
   this.isAlive = true;
   this.equipped = false;
+
   this.getPack = function () {
     return pack;
   };
+
   this.getMaxHealth = function () {
     return maxHealth;
-  }
+  };
 };
 
 //assign prototype functions for getPack and getMaxHealth
 Player.prototype.getPack = function () {
   throw new Error('Method Not Defined');
 };
+
 Player.prototype.getMaxHealth = function () {
   throw new Error('Method Not Defined');
 };
@@ -159,7 +162,7 @@ Player.prototype.takeItem = function (item) {
   } else {
     console.log(`${this.name} cannot pick up any more items.`);
     return false;
-  }
+  };
 };
 
 /**
@@ -196,7 +199,7 @@ Player.prototype.discardItem = function (item) {
     this.getPack().splice(this.getPack().indexOf(item), 1);
     console.log(`${this.name} has discarded/equipped/eaten a ${item.name}.`);
     return true;
-  }
+  };
 };
 
 /**
@@ -275,13 +278,13 @@ Player.prototype.eat = function (itemToEat) {
 
   if (Number(itemToEat.energy) >= Number(this.getMaxHealth())) {
     return this.health = this.getMaxHealth();
-  }
-  
-  if(Number(itemToEat.energy) + this.health > Number(this.getMaxHealth())){
+  };
+
+  if (Number(itemToEat.energy) + this.health > Number(this.getMaxHealth())) {
     return this.health = this.getMaxHealth();
-  }
-  
-    return this.health += Number(itemToEat.energy);
+  };
+
+  return this.health += Number(itemToEat.energy);
 };
 
 
@@ -326,7 +329,7 @@ Player.prototype.equippedWith = function () {
   if (this.equipped === false) {
     console.log(`${this.name} is not equipped!`);
     return false;
-  }
+  };
 
   console.log(`${this.name} is equipped with a ${this.equipped.name}`);
   return this.equipped.name;
