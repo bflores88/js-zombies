@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * Class => Item(name)
  * -----------------------------
@@ -8,6 +10,9 @@
  * @property {string} name
  */
 
+function Item(name) {
+  this.name = name;
+};
 
 /**
  * Class => Weapon(name, damage)
@@ -25,13 +30,17 @@
  * @property {number} damage
  */
 
+function Weapon(name, damage) {
+  this.damage = damage;
+  Item.call(this, name);
+}
 
 /**
  * Weapon Extends Item Class
  * -----------------------------
  */
 
-
+Weapon.prototype = Object.create(Item.prototype);
 
 /**
  * Class => Food(name, energy)
@@ -49,13 +58,17 @@
  * @property {number} energy
  */
 
+function Food(name, energy) {
+  this.energy = energy;
+  Item.call(this, name);
+};
 
 /**
  * Food Extends Item Class
  * -----------------------------
  */
 
-
+Food.prototype = Object.create(Item.prototype);
 
 /**
  * Class => Player(name, health, strength, speed)
@@ -79,6 +92,30 @@
  * @property {method} getMaxHealth         Returns private variable `maxHealth`.
  */
 
+function Player(name, health, strength, speed) {
+  const pack = [];
+  const maxHealth = health;
+  this.name = name;
+  this.health = health;
+  this.strength = strength;
+  this.speed = speed;
+  this.isAlive = true;
+  this.equipped = false;
+  this.getPack = function () {
+    return pack;
+  };
+  this.getMaxHealth = function () {
+    return maxHealth;
+  }
+};
+
+//assign prototype functions for getPack and getMaxHealth
+Player.prototype.getPack = function () {
+  throw new Error('Method Not Defined');
+};
+Player.prototype.getMaxHealth = function () {
+  throw new Error('Method Not Defined');
+};
 
 /**
  * Player Class Method => checkPack()
@@ -92,6 +129,9 @@
  * @name checkPack
  */
 
+Player.prototype.checkPack = function () {
+  return console.log(`${this.name} has the following items: ${this.getPack().map(element => element.name).join(' ')}`);
+};
 
 /**
  * Player Class Method => takeItem(item)
@@ -111,6 +151,16 @@
  * @return {boolean} true/false     Whether player was able to store item in pack.
  */
 
+Player.prototype.takeItem = function (item) {
+  if (this.getPack().length < 3) {
+    this.getPack().push(item);
+    console.log(`${this.name} has picked up an item: ${item.name}.`);
+    return true;
+  } else {
+    console.log(`${this.name} cannot pick up any more items.`);
+    return false;
+  }
+};
 
 /**
  * Player Class Method => discardItem(item)
@@ -138,6 +188,16 @@
  * @return {boolean} true/false     Whether player was able to remove item from pack.
  */
 
+Player.prototype.discardItem = function (item) {
+  if (this.getPack().indexOf(item) === -1) {
+    console.log(`${item.name} is not in the pack.`);
+    return false;
+  } else {
+    this.getPack().splice(this.getPack().indexOf(item), 1);
+    console.log(`${this.name} has discarded/equipped/eaten a ${item.name}.`);
+    return true;
+  }
+};
 
 /**
  * Player Class Method => equip(itemToEquip)
@@ -159,6 +219,26 @@
  * @param {Weapon} itemToEquip  The weapon item to equip.
  */
 
+Player.prototype.equip = function (itemToEquip) {
+  if (!(itemToEquip instanceof Weapon)) {
+    return false;
+  };
+
+  if (this.getPack().indexOf(itemToEquip) === -1) {
+    return false;
+  };
+
+  if (this.equipped === false) {
+    this.discardItem(itemToEquip);
+    this.equipped = itemToEquip;
+    console.log(`${this.name} has equipped ${itemToEquip.name}`);
+  } else {
+    this.discardItem(itemToEquip);
+    this.takeItem(this.equipped);
+    this.equipped = itemToEquip;
+    console.log(`${this.name} has equipped ${itemToEquip.name}`);
+  };
+};
 
 /**
  * Player Class Method => eat(itemToEat)
@@ -179,6 +259,27 @@
  * @param {Food} itemToEat  The food item to eat.
  */
 
+Player.prototype.eat = function (itemToEat) {
+  if (!(itemToEat instanceof Food)) {
+    console.log(`${itemToEat.name} is not a Food item!`);
+    return false;
+  };
+
+  if (this.getPack().indexOf(itemToEat) === -1) {
+    console.log(`${this.name} does not have the Food item ${itemToEat.name}.`);
+    return false;
+  };
+
+  this.discardItem(itemToEat);
+  console.log(`${this.name} has consumed a ${itemToEat.name}`);
+
+  if (Number(itemToEat.energy) >= Number(this.getMaxHealth())) {
+    return this.health = this.getMaxHealth();
+  } else {
+    return this.health += Number(itemToEat.energy);
+  };
+};
+
 
 /**
  * Player Class Method => useItem(item)
@@ -193,6 +294,15 @@
  * @param {Item/Weapon/Food} item   The item to use.
  */
 
+Player.prototype.useItem = function (item) {
+  if (item instanceof Weapon) {
+    return this.equip(item);
+  };
+
+  if (item instanceof Food) {
+    return this.eat(item);
+  };
+};
 
 /**
  * Player Class Method => equippedWith()
@@ -208,6 +318,15 @@
  * @return {string/boolean}   Weapon name or false if nothing is equipped.
  */
 
+Player.prototype.equippedWith = function () {
+  if (this.equipped === false) {
+    console.log(`${this.name} is not equipped!`);
+    return false;
+  }
+
+  console.log(`${this.name} is equipped with a ${this.equipped.name}`);
+  return this.equipped.name;
+};
 
 /**
  * Class => Zombie(health, strength, speed)
