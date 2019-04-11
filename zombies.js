@@ -31,8 +31,8 @@ function Item(name) {
  */
 
 function Weapon(name, damage) {
-  this.damage = damage;
   Item.call(this, name);
+  this.damage = damage;
 }
 
 /**
@@ -59,8 +59,8 @@ Weapon.prototype = Object.create(Item.prototype);
  */
 
 function Food(name, energy) {
-  this.energy = energy;
   Item.call(this, name);
+  this.energy = energy;
 }
 
 /**
