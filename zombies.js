@@ -402,7 +402,7 @@ function StrongZombie(health, strength, speed) {
  * -----------------------------
  */
 
- StrongZombie.prototype = Object.create(Zombie.prototype);
+StrongZombie.prototype = Object.create(Zombie.prototype);
 
 /**
  * Class => RangedZombie(health, strength, speed)
