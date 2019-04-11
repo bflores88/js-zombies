@@ -274,11 +274,7 @@ class Player {
 
     this.discardItem(itemToEat);
 
-    if (Number(itemToEat.energy) >= Number(this.getMaxHealth())) {
-      return this.health = this.getMaxHealth();
-    };
-
-    if (Number(itemToEat.energy) + this.health > Number(this.getMaxHealth())) {
+    if (Number(itemToEat.energy) + this.health >= Number(this.getMaxHealth())) {
       return this.health = this.getMaxHealth();
     };
 
